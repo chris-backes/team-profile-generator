@@ -87,7 +87,6 @@ const promptEmployee = (personalInfo) => {
 		])
 		.then((data) => {
             emply.length === 0 ? emply.push(new Manager(data.name, data.id, data.email, data.phone)) : data === "Intern" ? emply.push(new Intern(data.name, data.id, data.email, data.school)) : emply.push(new Engineer(data.name, data.id, data.email, data.githubInput));
-            console.log(data)
 			if (data.confirmAddEmployee) {
 				return promptEmployee();
 			} else {
