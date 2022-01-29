@@ -10,5 +10,9 @@ test("creates a new employee", () => {
 
 	expect(employee.name).toBe("Jeff Bridges");
 	expect(employee.id).toBe("785902");
-	expect(employee.email).toBe("Jeff.Bridges@business.com");
+	expect(employee.email).toBe("Jeff.Bridges@business.com")
+	expect(employee.getName()).toBe("Jeff Bridges");
+	expect(employee.getId()).toBe("785902");
+	expect(employee.getEmail()).toBe("Jeff.Bridges@business.com")
+	expect(employee.getRole()).toBe("Employee");
 });

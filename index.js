@@ -16,7 +16,7 @@ const promptEmployee = (personalInfo) => {
                 type: "list",
                 name: "jobType",
                 message: "What does this employee do",
-                choices: ['None', 'Manager', 'Intern', 'Engineer'],
+                choices: ['Intern', 'Engineer'],
                 when: () => {
                     return !!emply.length
                 },

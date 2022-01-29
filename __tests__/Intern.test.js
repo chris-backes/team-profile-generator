@@ -13,4 +13,9 @@ test("creates a new intern", () => {
 	expect(intern.id).toBe("785902");
 	expect(intern.email).toBe("Jeff.Bridges@business.com");
 	expect(intern.school).toBe("LMU Munich");
+	expect(intern.getName()).toBe("Jeff Bridges");
+	expect(intern.getId()).toBe("785902");
+	expect(intern.getEmail()).toBe("Jeff.Bridges@business.com")
+	expect(intern.getRole()).toBe("Intern")
+	expect(intern.getSchool()).toBe("LMU Munich");
 });
