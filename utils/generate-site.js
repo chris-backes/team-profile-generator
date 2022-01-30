@@ -9,7 +9,7 @@ const writeFile = (htmlPage) => {
             }
             resolve({
                 ok: true,
-                message: "File Created!",
+                message: "HTML file created!",
             });
         });
     });
@@ -24,7 +24,7 @@ const copyFile = () => {
             }
             resolve({
                 ok: true,
-                message: "File copied!",
+                message: "CSS file copied!",
             });
         });
     });

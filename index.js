@@ -1,10 +1,12 @@
-const inquirer = require('inquirer')
-const Manager = require('./lib/Manager.js')
-const Engineer = require('./lib/Engineer.js')
-const Intern = require('./lib/Intern.js');
-const { writeFile, copyFile } = require('./utils/generate-site.js');
+const inquirer = require("inquirer");
+const Manager = require("./lib/Manager.js");
+const Engineer = require("./lib/Engineer.js");
+const Intern = require("./lib/Intern.js");
+const { writeFile, copyFile } = require("./utils/generate-site.js");
 const generatePage = require("./src/pageTemplate.js");
-let emply = []
+let nextEmply = "Manager"
+let emply = [];
+
 
 const promptEmployee = (personalInfo) => {
 	console.log(`
@@ -14,15 +16,6 @@ const promptEmployee = (personalInfo) => {
     `);
 	return inquirer
 		.prompt([
-            {
-                type: "list",
-                name: "jobType",
-                message: "What does this employee do",
-                choices: ['Intern', 'Engineer'],
-                when: () => {
-                    return !!emply.length
-                },
-            },
 			{
 				type: "input",
 				name: "name",
@@ -47,49 +40,65 @@ const promptEmployee = (personalInfo) => {
 					return /@/.test(emailInput);
 				},
 			},
-            {
-                type: "input",
-                name: "github",
-                message: "What is this employee's github username?",
-                validate: (githubInput) => {
-                    return !!githubInput
-                },
-                when: ({ jobType }) => {
-                    return jobType === "Engineer"
-                }
-            },
-            {
-                type: "input",
-                name: "school",
-                message: "What school does this intern current attend?",
-                validate: (schoolInput) => {
-                    return !!schoolInput
-                },
-                when: ({ jobType }) => {
-                    return jobType === "Intern"
-                }
-            },
-            {
-                type: "input",
-                name: "phone",
-                message: "What is the 10-digit office line?",
-                validate: (phoneInput) => {
-                    return !!phoneInput
-                },
-                when: () => {
-                    return !emply.length
-                }
-            },
 			{
-				type: "confirm",
-				name: "confirmAddEmployee",
+				type: "input",
+				name: "github",
+				message: "What is this employee's github username?",
+				validate: (githubInput) => {
+					return !!githubInput;
+				},
+				when: () => {
+					return nextEmply === "Engineer";
+				},
+			},
+			{
+				type: "input",
+				name: "school",
+				message: "What school does this intern current attend?",
+				validate: (schoolInput) => {
+					return !!schoolInput;
+				},
+				when: () => {
+					return nextEmply === "Intern";
+				},
+			},
+			{
+				type: "input",
+				name: "phone",
+				message: "What is the 10-digit office line?",
+				validate: (phoneInput) => {
+					return !!phoneInput;
+				},
+				when: () => {
+					return nextEmply === "Manager";
+				},
+			},
+			{
+				type: "list",
+				name: "addEmployee",
 				message: "Would you like to enter another employee?",
-				default: false,
-			}
+				choices: ["No", "Intern", "Engineer"]
+			},
 		])
 		.then((data) => {
-            emply.length === 0 ? emply.push(new Manager(data.name, data.id, data.email, data.phone)) : data.jobType === "Intern" ? emply.push(new Intern(data.name, data.id, data.email, data.school)) : emply.push(new Engineer(data.name, data.id, data.email, data.github));
-			if (data.confirmAddEmployee) {
+			emply.length === 0
+				? emply.push(
+						new Manager(data.name, data.id, data.email, data.phone)
+				  )
+				: nextEmply === "Intern"
+				? emply.push(
+						new Intern(data.name, data.id, data.email, data.school)
+				  )
+				: emply.push(
+						new Engineer(
+							data.name,
+							data.id,
+							data.email,
+							data.github
+						)
+				  );
+            nextEmply = data.addEmployee
+			if (data.addEmployee !== "No") {
 				return promptEmployee();
 			} else {
 				return emply;
@@ -98,19 +107,19 @@ const promptEmployee = (personalInfo) => {
 };
 
 promptEmployee()
-    .then(personnelInfo => {
-        return generatePage(personnelInfo)
-    })
-    .then(pageData => {
-        return writeFile(pageData)
-    })
-    .then(writeResponse => {
-        console.log(writeResponse)
-        return copyFile();
-    })
-    .then(copyResponse => {
-        console.log(copyResponse)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+	.then((personnelInfo) => {
+		return generatePage(personnelInfo);
+	})
+	.then((pageData) => {
+		return writeFile(pageData);
+	})
+	.then((writeResponse) => {
+		console.log(writeResponse);
+		return copyFile();
+	})
+	.then((copyResponse) => {
+		console.log(copyResponse);
+	})
+	.catch((err) => {
+		console.log(err);
+	});

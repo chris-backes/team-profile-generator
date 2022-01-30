@@ -1,0 +1,42 @@
+header {
+    width: 100%;
+    background-color: red;
+}
+h1 {
+    text-align: center;
+    color: white;
+    height: 4em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+a:hover {
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.container-local {
+	padding: auto 20%;
+}
+
+.row-local {
+    justify-content: space-evenly;
+}
+
+.card-local {
+	max-width: 300px;
+    min-width: 275px;
+}
+
+@media only screen and (max-width: 1200px) {
+    .container-local {
+        margin: auto 10%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container-local {
+        margin: auto 2%;
+    }
+}
