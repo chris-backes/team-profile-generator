@@ -2,6 +2,8 @@ const inquirer = require('inquirer')
 const Manager = require('./lib/Manager.js')
 const Engineer = require('./lib/Engineer.js')
 const Intern = require('./lib/Intern.js');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
+const generatePage = require("./src/pageTemplate.js");
 let emply = []
 
 const promptEmployee = (personalInfo) => {
@@ -32,7 +34,7 @@ const promptEmployee = (personalInfo) => {
 			{
 				type: "input",
 				name: "id",
-				message: "Waht is the Employee's numeric 8 digit ID",
+				message: "What is the Employee's numeric 8 digit ID",
 				validate: (idInput) => {
 					return idInput.length === 8 && !/\D/.test(idInput);
 				},
@@ -86,7 +88,7 @@ const promptEmployee = (personalInfo) => {
 			}
 		])
 		.then((data) => {
-            emply.length === 0 ? emply.push(new Manager(data.name, data.id, data.email, data.phone)) : data === "Intern" ? emply.push(new Intern(data.name, data.id, data.email, data.school)) : emply.push(new Engineer(data.name, data.id, data.email, data.githubInput));
+            emply.length === 0 ? emply.push(new Manager(data.name, data.id, data.email, data.phone)) : data.jobType === "Intern" ? emply.push(new Intern(data.name, data.id, data.email, data.school)) : emply.push(new Engineer(data.name, data.id, data.email, data.github));
 			if (data.confirmAddEmployee) {
 				return promptEmployee();
 			} else {
@@ -95,6 +97,20 @@ const promptEmployee = (personalInfo) => {
 		});
 };
 
-promptEmployee().then((personalInfo) => {
-    console.log(emply)
-})
+promptEmployee()
+    .then(personnelInfo => {
+        return generatePage(personnelInfo)
+    })
+    .then(pageData => {
+        return writeFile(pageData)
+    })
+    .then(writeResponse => {
+        console.log(writeResponse)
+        return copyFile();
+    })
+    .then(copyResponse => {
+        console.log(copyResponse)
+    })
+    .catch(err => {
+        console.log(err)
+    })

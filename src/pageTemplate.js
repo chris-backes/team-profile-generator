@@ -1,19 +1,36 @@
 function objectUnpack(data) {
-    let str = ""
-    for (let item of data) {
-        let employment = item.getRole()
-        let extra = employment = 'Manager' ? ["Office Line", item.getOfficeNumber()] : employment = 'Intern' ? ['School', item.getSchool()] : ['GitHub', `<a href="https://www.github.com/${item.getGithub()}">${item.getGithub()}</a>`]
-        str += `<h2>${employment}</h2>
-<h3>${employment}</h3>
-<p>Name : ${item.getName()}</p>
-<p>ID : ${item.getId()}</p>
-<p>Email : <a href="mailto:${item.getEmail()}">${item.getEmail()}</a></p>
-<p>${extra[0]} : ${extra[1]}</p>`
-    }
+	let str = "";
+	for (let item of data) {
+		let employment = item.getRole();
+		let employeeTypeInfo =
+			employment === "Manager"
+				? ["Office Line", item.getOfficeNumber()]
+				: employment === "Intern"
+				? ["School", item.getSchool()]
+				: [
+						"GitHub",
+						`<a href="https://www.github.com/${item.getGithub()}" target="_blank">${item.getGithub()}</a>`,
+				  ];
+		str += `
+        <div class="card card-local text-white bg-primary col-6 col-xl-4 my-3 px-0">
+            <div class="card-body px-0 pb-0">
+                <div class="card-title px-3">
+                    <h5>${item.getName()}</h5>
+                    <h6>${item.getIcon()} ${employment}</h6>
+                </div>
+                <ul class="list-group list-group-flush text-dark bg-light">
+                    <li class="list-group-item">ID : ${item.getId()}</li>>
+                    <li class="list-group-item">Email : <a href="mailto:${item.getEmail()}">${item.getEmail()}</a></li>>
+                    <li class="list-group-item">${employeeTypeInfo[0]} : ${employeeTypeInfo[1]}</li>>
+                </ul>
+            </div>
+        </div>`;
+	}
+	return str;
 }
 
 module.exports = (data) => {
-    return `
+	return `
     <!DOCTYPE html> 
     <html lang="en"> 
         <head>
@@ -29,7 +46,11 @@ module.exports = (data) => {
             <h1>My Team</h1>
         </header>
         <body>
-${objectUnpack(data)}
+            <div class="container container-local">
+                <div class="row row-local">
+                    ${objectUnpack(data)}
+                </div>
+            </div>
         </body>
     </html>
     `;
